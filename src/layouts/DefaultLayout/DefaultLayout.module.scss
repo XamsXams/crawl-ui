@@ -1,0 +1,12 @@
+.wrapper {
+    position: relative;
+    // background: #f3f3f3;
+
+    .content {
+        position: relative;
+        padding: 80px 70px;
+        display: grid;
+
+        grid-template-columns: repeat(4, auto);
+    }
+}

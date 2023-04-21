@@ -1,25 +1,69 @@
-import logo from './logo.svg';
-import './App.css';
+import { Fragment, useContext } from 'react';
+
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { privateRoutes, publicRoutes } from '~/routes';
+import DefaultLayout from '~/layouts';
+import { AuthContext } from './contexts/AuthContext/AuthProvider';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const { authState } = useContext(AuthContext);
+
+    return (
+        <Router>
+            <div className="App">
+                <Routes>
+                    {publicRoutes.length > 0 &&
+                        publicRoutes.map((route, index) => {
+                            const Page = route.component;
+
+                            let Layout = DefaultLayout;
+                            if (route.layout) {
+                                Layout = route.layout;
+                            } else if (route.layout === null) {
+                                Layout = Fragment;
+                            }
+                            return (
+                                <Route
+                                    key={index}
+                                    path={route.path}
+                                    element={
+                                        <Layout>
+                                            <Page />
+                                        </Layout>
+                                    }
+                                />
+                            );
+                        })}
+                    {privateRoutes.length > 0 &&
+                        privateRoutes.map((route, index) => {
+                            const Page = route.component;
+
+                            let Layout = DefaultLayout;
+                            if (route.layout) {
+                                Layout = route.layout;
+                            } else if (route.layout === null) {
+                                Layout = Fragment;
+                            }
+                            return (
+                                <Route
+                                    key={index}
+                                    path={route.path}
+                                    element={
+                                        authState.user ? (
+                                            <Layout>
+                                                <Page />
+                                            </Layout>
+                                        ) : (
+                                            <Navigate to={'/login'} />
+                                        )
+                                    }
+                                />
+                            );
+                        })}
+                </Routes>
+            </div>
+        </Router>
+    );
 }
 
 export default App;
