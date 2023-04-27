@@ -3,8 +3,6 @@ const routes = {
     login: '/login',
     register: '/register',
     post: '/post/:slug',
-    write: '/write',
-    profile: '/profile',
     category: '/:slug',
 };
 
