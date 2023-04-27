@@ -13,6 +13,7 @@ function Home() {
     );
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState();
 
     const excepts = ['icon', 'banner', 'logo'];
     const hanldeGetLink = async () => {
@@ -22,11 +23,17 @@ function Home() {
                 website: 'https://thesosoye.com',
                 excepts: JSON.stringify(excepts),
             });
-            console.log(`file: App.js:18 > res:`, res);
-            setData(res);
+            console.log(`file: App.js:26 > res:`, res);
+            if (res) {
+                setData(res);
+            } else {
+                setError('No result');
+            }
+
             setLoading(false);
         } catch (error) {
             setLoading(false);
+            setError('No result');
             console.log(`file: App.js:19 > error:`, error);
         }
     };
@@ -66,6 +73,7 @@ function Home() {
                 </div>
             </div>
 
+            {error && <div className={cx('error')}>{error}</div>}
             <div className={cx('result-wrapper')}>
                 <ul className={cx('links')}>
                     {data &&

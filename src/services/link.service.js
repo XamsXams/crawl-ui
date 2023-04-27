@@ -12,5 +12,6 @@ export const getAllText = async (url, options = {}) => {
         return res.data;
     } catch (error) {
         console.log(error);
+        return null;
     }
 };
